@@ -1,0 +1,6 @@
+[package]
+name = "logpush"
+version = "0.1.0"
+authors = ["Andrew Thompson <netengr2009@gmail.com>"]
+
+[dependencies]
