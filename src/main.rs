@@ -11,11 +11,11 @@ fn main() {
     println!("Value for redis_host: {}", redis_host);
 
     let redis_key = matches.value_of("redis_key").unwrap_or("default.conf");
-    println!("Value for redis_host: {}", redis_key);
+    println!("Value for redis_key: {}", redis_key);
 
     let elasticsearch_host = matches.value_of("elasticsearch_host").unwrap_or("default.conf");
-    println!("Value for redis_host: {}", elasticsearch_host);
+    println!("Value for elasticsearch_host: {}", elasticsearch_host);
 
     let index_pattern = matches.value_of("index_pattern").unwrap_or("default.conf");
-    println!("Value for redis_host: {}", index_pattern);
+    println!("Value for index_pattern: {}", index_pattern);
 }
