@@ -4,7 +4,24 @@ use clap::App;
 
 extern crate redis;
 use redis::Commands;
+
 use std::{thread, time};
+
+
+struct Redis;
+
+impl Redis {
+    pub fn new(host: &str) -> Result<redis::Connection, redis::RedisError> {
+        let client = try!(redis::Client::open(host));
+        let con = client.get_connection();
+        match con {
+            Ok(con) => Ok(con),
+            Err(e) => {
+                panic!("Error connecting to redis server: {}. {}", host, e);
+            },
+        }
+    }
+}
 
 
 fn main() {
@@ -25,8 +42,7 @@ fn main() {
     println!("Value for index_pattern: {}", index_pattern);
 
 
-    let client = redis::Client::open(redis_host).unwrap();
-    let con = client.get_connection().unwrap();
+    let con = Redis::new(redis_host).unwrap();
     let num_secs = 2;
     let max_bulk_size = 8000;
     let mut bulk = Vec::with_capacity(max_bulk_size);
