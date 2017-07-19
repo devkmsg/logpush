@@ -7,6 +7,8 @@ use redis::Commands;
 
 use std::{thread, time};
 
+use std::time::SystemTime;
+
 
 struct Redis;
 
@@ -47,21 +49,24 @@ fn main() {
     let max_bulk_size = 8000;
     let mut bulk = Vec::with_capacity(max_bulk_size);
 
+    let mut last_bulk = SystemTime::now();
+
     loop {
-        //let now = std::time::SystemTime::now();
-        //println!("{:?}", now.duration_since(last_push));
+        let now = SystemTime::now();
         let key: bool = con.exists(redis_key).unwrap();
 
         if key == true { //FIXME: put in a timer so we can push evey x seconds
             let line: redis::Value = con.rpop(redis_key).unwrap();
             let line_value: redis::Value = redis::from_redis_value(&line).unwrap();
 
+            let time_diff = now.duration_since(last_bulk).unwrap().as_secs();  //FIXME: not getting updated
+            println!("time diff: {:?}", time_diff);
+
             if bulk.len() >= max_bulk_size {
                 println!("Push bulk...");
                 bulk.truncate(0);
-
+                last_bulk = now;
             } else {
-                let last_push = std::time::SystemTime::now();
                 bulk.push(line_value);
             }
         } else {
