@@ -1,36 +1,50 @@
-name: logpush 
+name: logpush
 version: "0.1.0"
 author: Andrew Thompson <netengr2009@gmail.com>
 about: Reads Logstash formatted logs from Redis and push them to Elasticsearch
 args:
     - redis_host:
         short: r
-        long: redis-host 
+        long: redis-host
         takes_value: true
-        value_name: HOST 
+        value_name: HOST
         default_value: redis://localhost:6379
-        help: Redis host to read from 
+        help: Redis host to read from
     - redis_key:
         short: k
         long: redis-key
         takes_value: true
-        value_name: KEY 
+        value_name: KEY
         default_value: logstash
-        help: Redis key to read from 
+        help: Redis key to read from
     - elasticsearch_host:
         short: e
         long: elasticsearch-host
         takes_value: true
-        value_name: HOST 
+        value_name: HOST
         default_value: http://localhost:9200
         help: Elasticsearch host to push to
     - index_pattern:
         short: i
-        long: index-pattern 
+        long: index-pattern
         takes_value: true
-        value_name: INDEX_PATTERN 
+        value_name: INDEX_PATTERN
         default_value: logstash-%{+YYYY.MM.dd}
         help: Elasticsearch index to write to
+    - max_bulk_size:
+        short: b
+        long: max-bulk-size
+        takes_value: true
+        value_name: MAX_BULK_SIZE
+        default_value: "8000"
+        help: Maximum number of documents in a Elasticsearch bulk
+    - max_bulk_interval_secs:
+        short: s
+        long: max-bulk-interval-secs
+        takes_value: true
+        value_name: MAX_BULK_INTERVAL_SECS
+        default_value: "60"
+        help: Maximum time between bulk requests
     - verbose:
         short: v
         multiple: true
