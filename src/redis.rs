@@ -3,21 +3,19 @@ use self::redis::Commands;
 
 pub struct Redis {
     pub connection: redis::Connection,
-    key: String,
-    host: String
+    key: String
 }
 
 impl Redis {
     pub fn new(host: String, key: String) -> Redis {
         Redis {
-            connection: Redis::connect(&host).unwrap(),
-            host: host,
+            connection: Redis::connect(host).unwrap(),
             key: key
         }
     }
 
-    fn connect(host: &String) -> Result<redis::Connection, redis::RedisError> {
-        let host: &str = host;
+    fn connect(host: String) -> Result<redis::Connection, redis::RedisError> {
+        let host: &str = &host;
         let client = try!(self::redis::Client::open(host));
         let con = client.get_connection();
         match con {
